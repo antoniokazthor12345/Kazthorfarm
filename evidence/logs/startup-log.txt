@@ -1,0 +1,5 @@
+I (2154) WIFI: Connected
+I (2400) MQTT: Connected to HiveMQ Cloud
+I (2501) OLED: Display initialized
+I (2603) SENSOR: DS18B20 detected
+I (2700) FARM: System Ready

@@ -1,0 +1,88 @@
+```txt
+=========================================
+KAZTHOR FARM V1
+CLIMATE CONTROL LOG
+=========================================
+
+Temperature : 21.75 °C
+Soil Moisture : 48 %
+Water Level : 28 %
+
+System State:
+
+NORMAL
+
+-----------------------------------------
+
+Relay
+
+OFF
+
+-----------------------------------------
+
+Fan
+
+Current Level : 2
+
+Target Level : 2
+
+Status:
+
+RUNNING
+
+-----------------------------------------
+
+Mist
+
+Current Level : 2
+
+Target Level : 2
+
+Status:
+
+RUNNING
+
+-----------------------------------------
+
+RGB Light
+
+State:
+
+ON
+
+Color:
+
+Red
+
+-----------------------------------------
+
+Buzzer
+
+OFF
+
+-----------------------------------------
+
+Control Logic
+
+Temperature OK
+
+Soil Moisture Above Critical Level
+
+Water Available
+
+Automatic Climate Adjustment Active
+
+-----------------------------------------
+
+Result
+
+Climate Controller Operating Normally
+
+Test Result:
+
+PASS
+
+=========================================
+End of Log
+=========================================
+```

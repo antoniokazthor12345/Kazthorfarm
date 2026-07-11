@@ -1,0 +1,8 @@
+Relay OFF
+Climate Controller Power OFF
+
+Relay ON
+Climate Controller Power ON
+
+Test Result:
+PASS

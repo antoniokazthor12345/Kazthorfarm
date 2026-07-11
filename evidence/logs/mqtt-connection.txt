@@ -1,0 +1,57 @@
+```txt
+=========================================
+KAZTHOR FARM V1
+MQTT CONNECTION LOG
+=========================================
+
+[BOOT] Initializing WiFi...
+
+[WIFI]
+SSID: ********
+Status: Connected
+IP Address: 192.168.100.xxx
+Signal: Excellent
+
+-----------------------------------------
+
+[MQTT]
+
+Broker: HiveMQ Cloud
+Protocol: MQTT over TLS
+Port: 8883
+
+Connecting...
+
+TLS Handshake...
+Authentication...
+
+Connection Successful
+
+Subscribed Topics:
+
+✓ kazthor/farm01/cmd
+
+Publishing Topics:
+
+✓ kazthor/farm01/data
+✓ kazthor/farm01/status
+✓ kazthor/farm01/alerts
+
+Heartbeat Started...
+
+Connection Status:
+
+ONLINE
+
+Reconnect Attempts:
+
+0
+
+Result:
+
+PASS
+
+=========================================
+End of Log
+=========================================
+```
