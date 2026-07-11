@@ -19,7 +19,7 @@ https://www.youtube.com/watch?v=l3PrIL1JVCo
 
 # 🚀 Quick Preview
 
-![KAZTHOR FARM V3 Demo](media/demo.gif)
+![KAZTHOR FARM V3 Demo](media/demo/demo.gif)
 
 El sistema permite:
 
