@@ -8,6 +8,14 @@ KAZTHOR FARM V3 forma parte del ecosistema **KAZTHOR LABS**, una plataforma de d
 
 ---
 
+## 🌐 Demo Online
+
+Puedes probar el dashboard web del proyecto:
+
+[🌐 Live Dashboard](https://antoniokazthor12345.github.io/Kazthorfarm/)
+
+---
+
 # 🎥 Project Demo
 
 Video completo de demostración:
@@ -498,6 +506,10 @@ KAZTHOR LABS
 GitHub:
 
 https://github.com/antoniokazthor12345
+
+Dashboard:
+
+https://antoniokazthor12345.github.io/Kazthorfarm/
 
 ---
 
