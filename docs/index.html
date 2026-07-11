@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAZTHOR FARM</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #0d0d0d;
+            color: #f0f0f0;
+            padding: 16px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+            color: #00e676;
+        }
+
+        #connection {
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 16px;
+            font-weight: bold;
+        }
+
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 16px 10px;
+            text-align: center;
+            border: 1px solid #2a2a2a;
+        }
+
+        .card h3 {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .value {
+            font-size: 34px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        #estado-val {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+
+        .normal {
+            color: #00e676;
+        }
+
+        .alerta {
+            color: #ffd600;
+        }
+
+        .critical {
+            color: #ff1744;
+        }
+
+        .manual {
+            color: #40c4ff;
+        }
+
+        .error {
+            color: #ff6d00;
+        }
+
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .device-card {
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 14px;
+            border: 1px solid #2a2a2a;
+            text-align: center;
+        }
+
+        .device-card h3 {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        .level-display {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00e676;
+            margin-bottom: 10px;
+        }
+
+        .level-display span {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .level-bar {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .level-pip {
+            width: 28px;
+            height: 8px;
+            border-radius: 4px;
+            background: #2a2a2a;
+            transition: background 0.3s;
+        }
+
+        .level-pip.active-1 {
+            background: #00e676;
+        }
+
+        .level-pip.active-2 {
+            background: #ffd600;
+        }
+
+        .level-pip.active-3 {
+            background: #ff6d00;
+        }
+
+        .level-btns {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-level {
+            padding: 7px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            background: #2a2a2a;
+            color: #ccc;
+            transition: all 0.2s;
+        }
+
+        .btn-level:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+
+        .btn-level.btn-off {
+            background: #37474f;
+            color: #fff;
+        }
+
+        .btn-level.btn-l1 {
+            background: #1b5e20;
+            color: #fff;
+        }
+
+        .btn-level.btn-l2 {
+            background: #f57f17;
+            color: #fff;
+        }
+
+        .btn-level.btn-l3 {
+            background: #b71c1c;
+            color: #fff;
+        }
+
+        .btn-level.btn-on {
+            background: #1565c0;
+            color: #fff;
+        }
+
+        .light-color-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            border: 2px solid #444;
+            transition: background 0.4s;
+        }
+
+        .alarm-status {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .alarm-on {
+            color: #ff1744;
+        }
+
+        .alarm-off {
+            color: #444;
+        }
+
+        .timer-status {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .timer-off {
+            color: #444;
+        }
+
+        .timer-on {
+            color: #ffd600;
+            text-shadow: 0 0 8px rgba(255, 214, 0, 0.45);
+        }
+
+        .btn-timer-active {
+            outline: 2px solid #ffd600;
+            box-shadow: 0 0 12px rgba(255, 214, 0, 0.45);
+            transform: scale(1.04);
+        }
+
+        .pump-section {
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 14px;
+            border: 1px solid #2a2a2a;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .pump-section h3 {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
+        #pump-status {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .pump-on {
+            color: #00e676;
+        }
+
+        .pump-off {
+            color: #ff1744;
+        }
+
+        .pump-btns {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-pump {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .btn-pump:hover {
+            opacity: 0.85;
+            transform: scale(1.04);
+        }
+
+        .btn-on {
+            background: #00c853;
+            color: #000;
+        }
+
+        .btn-off {
+            background: #d50000;
+            color: #fff;
+        }
+
+        .btn-auto {
+            background: #0091ea;
+            color: #fff;
+        }
+
+        .chart-box {
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .chart-box h3 {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 12px;
+            color: #555;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin: 14px 0 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🚜 KAZTHOR FARM</h1>
+    <div id="connection">MQTT: Conectando...</div>
+
+    <p class="section-title">📊 Sensores</p>
+    <div class="sensor-grid">
+        <div class="card">
+            <h3>🌡 Temperatura</h3>
+            <div id="temp" class="value" style="color:#ff6d00">--</div>
+        </div>
+        <div class="card">
+            <h3>🌱 Suelo</h3>
+            <div id="soil" class="value" style="color:#00e676">--</div>
+        </div>
+        <div class="card">
+            <h3>💧 Agua</h3>
+            <div id="water" class="value" style="color:#40c4ff">--</div>
+        </div>
+        <div class="card">
+            <h3>🚨 Estado</h3>
+            <div id="estado-val" class="normal">---</div>
+        </div>
+    </div>
+
+    <p class="section-title">⚙️ Control de dispositivos</p>
+    <div class="device-grid">
+
+        <div class="device-card">
+            <h3>🌀 Ventilador</h3>
+            <div class="level-display"><span id="fan-level-num">0</span><span>/ 3</span></div>
+            <div class="level-bar">
+                <div class="level-pip" id="fan-pip-1"></div>
+                <div class="level-pip" id="fan-pip-2"></div>
+                <div class="level-pip" id="fan-pip-3"></div>
+            </div>
+            <div class="level-btns">
+                <button class="btn-level btn-off" onclick="sendDeviceCmd('fan',0)">OFF</button>
+                <button class="btn-level btn-l1" onclick="sendDeviceCmd('fan',1)">1</button>
+                <button class="btn-level btn-l2" onclick="sendDeviceCmd('fan',2)">2</button>
+                <button class="btn-level btn-l3" onclick="sendDeviceCmd('fan',3)">3</button>
+            </div>
+        </div>
+
+        <div class="device-card">
+            <h3>💨 Humidificador</h3>
+            <div class="level-display"><span id="mist-level-num">0</span><span>/ 3</span></div>
+            <div class="level-bar">
+                <div class="level-pip" id="mist-pip-1"></div>
+                <div class="level-pip" id="mist-pip-2"></div>
+                <div class="level-pip" id="mist-pip-3"></div>
+            </div>
+            <div class="level-btns">
+                <button class="btn-level btn-off" onclick="sendDeviceCmd('mist',0)">OFF</button>
+                <button class="btn-level btn-l1" onclick="sendDeviceCmd('mist',1)">1</button>
+                <button class="btn-level btn-l2" onclick="sendDeviceCmd('mist',2)">2</button>
+                <button class="btn-level btn-l3" onclick="sendDeviceCmd('mist',3)">3</button>
+            </div>
+        </div>
+
+        <div class="device-card">
+            <h3>💡 Luz RGB</h3>
+            <div class="light-color-dot" id="light-dot"></div>
+            <div class="level-display" id="light-level-num" style="font-size:18px">OFF</div>
+            <div class="level-btns" style="margin-top:4px">
+                <button class="btn-level btn-off" onclick="sendLightCmd('off')" style="flex:1">OFF</button>
+                <button class="btn-level btn-on" onclick="sendLightCmd('on')" style="flex:1">ON</button>
+            </div>
+        </div>
+
+        <div class="device-card">
+            <h3>🔔 Alarma</h3>
+            <div class="alarm-status alarm-off" id="alarm-status">● SILENCIO</div>
+            <div class="level-btns" style="margin-top:8px">
+                <button class="btn-level btn-l3" onclick="sendAlarmCmd('on')" style="flex:1">ACTIVAR</button>
+                <button class="btn-level btn-off" onclick="sendAlarmCmd('off')" style="flex:1">SILENCIAR</button>
+            </div>
+        </div>
+
+        <div class="device-card">
+            <h3>⏱ Temporizador</h3>
+            <div class="timer-status timer-off" id="timer-status">OFF</div>
+            <div class="level-display" style="font-size:14px; margin-bottom:10px;">
+                <span id="timer-level-num">0</span><span>/ 3</span>
+            </div>
+            <div class="level-bar">
+                <div class="level-pip" id="timer-pip-1"></div>
+                <div class="level-pip" id="timer-pip-2"></div>
+                <div class="level-pip" id="timer-pip-3"></div>
+            </div>
+            <div class="level-btns">
+                <button class="btn-level btn-off" id="timer-btn-0" onclick="sendTimerCmd(0)">OFF</button>
+                <button class="btn-level btn-l1" id="timer-btn-1" onclick="sendTimerCmd(1)">1H</button>
+                <button class="btn-level btn-l2" id="timer-btn-2" onclick="sendTimerCmd(2)">2H</button>
+                <button class="btn-level btn-l3" id="timer-btn-3" onclick="sendTimerCmd(3)">3H</button>
+            </div>
+        </div>
+
+    </div>
+
+    <p class="section-title">🔧 Bomba de agua</p>
+    <div class="pump-section">
+        <h3>Estado actual</h3>
+        <div id="pump-status" class="pump-off">OFF</div>
+        <div class="pump-btns">
+            <button class="btn-pump btn-on" onclick="pumpOn()">ENCENDER</button>
+            <button class="btn-pump btn-off" onclick="pumpOff()">APAGAR</button>
+            <button class="btn-pump btn-auto" onclick="autoMode()">MODO AUTO</button>
+        </div>
+    </div>
+
+    <div class="chart-box">
+        <h3>📈 Lecturas en tiempo real</h3>
+        <canvas id="chart"></canvas>
+    </div>
+
+    <script>
+        const MQTT_HOST = "**********************************";
+        const MQTT_USER = "**********************************";
+        const MQTT_PASS = "**********************************";
+
+        const TOPIC_DATA = "kazthor/farm01/data";
+        const TOPIC_STATUS = "kazthor/farm01/status";
+        const TOPIC_ALERTS = "kazthor/farm01/alerts";
+        const TOPIC_CMD = "kazthor/farm01/cmd";
+
+        let lightOn = false;
+        let alarmOn = false;
+        let timerLevel = 0;
+        let lightPresses = 0;
+
+        const LIGHT_COLORS = [
+            { label: "Rojo", bg: "#f44336" },
+            { label: "Verde", bg: "#4caf50" },
+            { label: "Azul", bg: "#2196f3" },
+            { label: "Amarillo", bg: "#ffeb3b" },
+            { label: "Cian", bg: "#00bcd4" },
+            { label: "Morado", bg: "#9c27b0" },
+            { label: "OFF", bg: "#1a1a1a" },
+        ];
+
+        const chart = new Chart(document.getElementById("chart"), {
+            type: "bar",
+            data: {
+                labels: ["Temperatura °C", "Suelo %", "Agua %"],
+                datasets: [{
+                    label: "Lecturas actuales",
+                    data: [0, 0, 0],
+                    backgroundColor: ["#ff6d00", "#00e676", "#40c4ff"],
+                    borderColor: ["#e64a19", "#00c853", "#0091ea"],
+                    borderWidth: 2,
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: "#aaa" } } },
+                scales: {
+                    x: { ticks: { color: "#aaa" }, grid: { color: "#222" } },
+                    y: { beginAtZero: true, max: 100, ticks: { color: "#aaa" }, grid: { color: "#222" } }
+                }
+            }
+        });
+
+        const client = mqtt.connect(MQTT_HOST, {
+            username: MQTT_USER,
+            password: MQTT_PASS,
+            reconnectPeriod: 3000
+        });
+
+        client.on("connect", () => {
+            setConn("MQTT: Conectado ✅", "#00e676");
+            client.subscribe(TOPIC_DATA);
+            client.subscribe(TOPIC_STATUS);
+            client.subscribe(TOPIC_ALERTS);
+        });
+        client.on("reconnect", () => setConn("MQTT: Reconectando...", "#ffd600"));
+        client.on("error", () => setConn("MQTT: Error de conexión ❌", "#ff1744"));
+
+        client.on("message", (topic, message) => {
+            let msg;
+            try { msg = JSON.parse(message.toString()); } catch (e) { return; }
+
+            if (topic === TOPIC_DATA) {
+                document.getElementById("temp").innerText = msg.temp + " °C";
+                document.getElementById("soil").innerText = msg.soil + " %";
+                document.getElementById("water").innerText = msg.water + " %";
+
+                const el = document.getElementById("estado-val");
+                el.innerText = msg.state;
+                el.className = "";
+                const cls = {
+                    NORMAL: "normal", ALERTA: "alerta", CRITICAL: "critical",
+                    MANUAL: "manual", "TEMP ERROR": "error", "CRIT WAIT": "alerta"
+                };
+                el.classList.add(cls[msg.state] || "");
+
+                const pump = document.getElementById("pump-status");
+                pump.innerText = msg.pump ? "ON" : "OFF";
+                pump.className = msg.pump ? "pump-on" : "pump-off";
+
+                if (msg.fan !== undefined) updateFanUI(Number(msg.fan));
+                if (msg.mist !== undefined) updateMistUI(Number(msg.mist));
+
+                if (msg.light !== undefined) {
+                    const wasOff = !lightOn;
+                    lightOn = Boolean(msg.light);
+                    if (!lightOn) {
+                        lightPresses = 0;
+                    } else if (wasOff && lightOn && lightPresses === 0) {
+                        lightPresses = 1;
+                    }
+                    refreshLightUI();
+                }
+
+                if (msg.alarm !== undefined) {
+                    alarmOn = Boolean(msg.alarm);
+                    refreshAlarmUI();
+                }
+
+                if (msg.timer !== undefined) {
+                    refreshTimerUI(Number(msg.timer));
+                }
+
+                chart.data.datasets[0].data = [msg.temp, msg.soil, msg.water];
+                chart.update();
+            }
+
+            if (topic === TOPIC_ALERTS) {
+                const el = document.getElementById("estado-val");
+                el.style.opacity = "0.3";
+                setTimeout(() => el.style.opacity = "1", 300);
+            }
+        });
+
+        // ============================================================
+        // UI HELPERS
+        // ============================================================
+        function setConn(text, color) {
+            const el = document.getElementById("connection");
+            el.innerText = text;
+            el.style.color = color;
+        }
+
+        function updateFanUI(level) {
+            document.getElementById("fan-level-num").innerText = level;
+            for (let i = 1; i <= 3; i++) {
+                const pip = document.getElementById("fan-pip-" + i);
+                pip.className = "level-pip";
+                if (i <= level) pip.classList.add("active-" + level);
+            }
+        }
+
+        function updateMistUI(level) {
+            document.getElementById("mist-level-num").innerText = level;
+            for (let i = 1; i <= 3; i++) {
+                const pip = document.getElementById("mist-pip-" + i);
+                pip.className = "level-pip";
+                if (i <= level) pip.classList.add("active-" + level);
+            }
+        }
+
+        function refreshLightUI() {
+            const dot = document.getElementById("light-dot");
+            const label = document.getElementById("light-level-num");
+            if (!lightOn || lightPresses === 0) {
+                dot.style.background = "#1a1a1a";
+                dot.style.boxShadow = "none";
+                label.innerText = "OFF";
+            } else {
+                const idx = (lightPresses - 1) % LIGHT_COLORS.length;
+                const c = LIGHT_COLORS[idx];
+                dot.style.background = c.bg;
+                dot.style.boxShadow = "0 0 12px " + c.bg;
+                label.innerText = c.label;
+            }
+        }
+
+        function refreshAlarmUI() {
+            const el = document.getElementById("alarm-status");
+            if (alarmOn) {
+                el.innerText = "🔔 ACTIVA";
+                el.className = "alarm-status alarm-on";
+            } else {
+                el.innerText = "● SILENCIO";
+                el.className = "alarm-status alarm-off";
+            }
+        }
+
+        function refreshTimerUI(level) {
+            level = Math.max(0, Math.min(3, Number(level)));
+            timerLevel = level;
+
+            const status = document.getElementById("timer-status");
+            document.getElementById("timer-level-num").innerText = level;
+
+            if (level === 0) {
+                status.innerText = "OFF";
+                status.className = "timer-status timer-off";
+            } else if (level === 1) {
+                status.innerText = "⏱ 1 HORA";
+                status.className = "timer-status timer-on";
+            } else {
+                status.innerText = "⏱ " + level + " HORAS";
+                status.className = "timer-status timer-on";
+            }
+
+            for (let i = 1; i <= 3; i++) {
+                const pip = document.getElementById("timer-pip-" + i);
+                pip.className = "level-pip";
+                if (i <= level) pip.classList.add("active-" + level);
+            }
+
+            for (let i = 0; i <= 3; i++) {
+                const btn = document.getElementById("timer-btn-" + i);
+                if (btn) btn.classList.remove("btn-timer-active");
+            }
+            const activeBtn = document.getElementById("timer-btn-" + level);
+            if (activeBtn) activeBtn.classList.add("btn-timer-active");
+        }
+
+        // ============================================================
+        // COMANDOS
+        // ============================================================
+
+        function sendDeviceCmd(device, value) {
+            if (!client.connected) { alert("MQTT no conectado"); return; }
+            const payload = { mode: "MANUAL_CLIMATE" };
+            payload[device] = value;
+            client.publish(TOPIC_CMD, JSON.stringify(payload));
+            console.log("[CMD]", JSON.stringify(payload));
+        }
+
+        function sendLightCmd(action) {
+            if (!client.connected) { alert("MQTT no conectado"); return; }
+            if (action === "on" && !lightOn) {
+                lightPresses = 1; lightOn = true; refreshLightUI();
+            } else if (action === "off") {
+                lightPresses = 0; lightOn = false; refreshLightUI();
+            }
+            client.publish(TOPIC_CMD, JSON.stringify({ mode: "MANUAL_CLIMATE", light: action }));
+        }
+
+        function sendAlarmCmd(action) {
+            if (!client.connected) { alert("MQTT no conectado"); return; }
+            alarmOn = (action === "on");
+            refreshAlarmUI();
+            client.publish(TOPIC_CMD, JSON.stringify({ alarm: action }));
+        }
+
+        function sendTimerCmd(level) {
+            if (!client.connected) { alert("MQTT no conectado"); return; }
+            level = Math.max(0, Math.min(3, Number(level)));
+            refreshTimerUI(level);
+            client.publish(TOPIC_CMD, JSON.stringify({ mode: "MANUAL_CLIMATE", timer: level }));
+            console.log("[CMD TIMER]", level);
+        }
+
+        function pumpOn() {
+            if (!client.connected) { alert("MQTT no conectado"); return; }
+            client.publish(TOPIC_CMD, JSON.stringify({ mode: "AUTO" }));
+            setTimeout(() => client.publish(TOPIC_CMD, JSON.stringify({ pump: "ON" })), 300);
+        }
+
+        function pumpOff() {
+            if (!client.connected) { alert("MQTT no conectado"); return; }
+            client.publish(TOPIC_CMD, JSON.stringify({ mode: "AUTO" }));
+            setTimeout(() => client.publish(TOPIC_CMD, JSON.stringify({ pump: "OFF" })), 300);
+        }
+
+        function autoMode() {
+            if (!client.connected) { alert("MQTT no conectado"); return; }
+            client.publish(TOPIC_CMD, JSON.stringify({ mode: "AUTO" }));
+        }
+
+        refreshTimerUI(0);
+    </script>
+
+</body>
+
+</html>
