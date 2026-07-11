@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAZTHOR FARM</title>
-    <img src="media/demo.gif" 
-     alt="KAZTHOR FARM V3 Demo"
-     width="800">
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -332,12 +329,33 @@
             text-transform: uppercase;
             margin: 14px 0 8px;
         }
+
+        .project-demo {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+            text-align: center;
+        }
+
+        .project-demo h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .project-demo img {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 15px;
+            display: block;
+            margin: auto;
+        }
     </style>
 </head>
 
 <body>
 
     <h1>🚜 KAZTHOR FARM</h1>
+    <img src="./demo/demo.gif" alt="KAZTHOR FARM V3 Demo">
     <div id="connection">MQTT: Conectando...</div>
 
     <p class="section-title">📊 Sensores</p>
