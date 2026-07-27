@@ -1,47 +1,50 @@
 # 🔌 Wiring Guide
 
-# KAZTHOR FARM V1
+# 🌱 KAZTHOR FARM V3.5
 
-This document describes the wiring configuration used in KAZTHOR FARM V1.
+**Hardware Wiring Documentation**
+
+This document describes the wiring configuration used in **KAZTHOR FARM V3.5**.
 
 ---
 
-# 📋 Pin Assignment Table
+# 📋 ESP32-S3 Pin Assignment
 
-| Device       | ESP32-S3 GPIO |
-| ------------ | ------------- |
-| OLED SDA     | GPIO 8        |
-| OLED SCL     | GPIO 9        |
-| Green LED    | GPIO 10       |
-| Red LED      | GPIO 11       |
-| Buzzer       | GPIO 12       |
-| DS18B20      | GPIO 13       |
-| Soil Sensor  | GPIO 4        |
-| Water Sensor | ADC Input     |
-| Relay Module | GPIO 15       |
-| FAN PC817    | GPIO 16       |
-| MIST PC817   | GPIO 17       |
-| LIGHT PC817  | GPIO 18       |
-| TIMER PC817  | GPIO 19       |
+| Device | ESP32-S3 GPIO |
+|----------|---------------|
+| OLED SDA | GPIO 8 |
+| OLED SCL | GPIO 9 |
+| Green LED | GPIO 10 |
+| Red LED | GPIO 11 |
+| Buzzer | GPIO 12 |
+| DS18B20 | GPIO 13 |
+| Soil Moisture Sensor | GPIO 4 (ADC) |
+| Water Level Sensor | ADC Input |
+| Relay Module | GPIO 15 |
+| FAN PC817 | GPIO 16 |
+| MIST PC817 | GPIO 17 |
+| LIGHT PC817 | GPIO 18 |
+| TIMER PC817 | GPIO 19 |
+| Servo Signal | GPIO 20 *(Adjust if different)* |
 
 ---
 
 # 🖥 OLED Display
 
-SSD1306 128x64
+## SSD1306 (128x64)
 
-Connection:
+### Connection
 
 ```txt
-OLED          ESP32-S3
+OLED               ESP32-S3
 
-VCC     --->  3.3V
-GND     --->  GND
-SDA     --->  GPIO8
-SCL     --->  GPIO9
+VCC      --------> 3.3V
+GND      --------> GND
+SDA      --------> GPIO8
+SCL      --------> GPIO9
 ```
 
-I2C Address:
+I2C Address
 
 ```txt
 0x3C
@@ -49,182 +52,256 @@ I2C Address:
 
 ---
 
-# 🌡 DS18B20
+# 🌡 DS18B20 Temperature Sensor
 
-Connection:
+### Connection
 
 ```txt
-DS18B20       ESP32-S3
+DS18B20            ESP32-S3
 
-RED      ---> 3.3V
-BLACK    ---> GND
-YELLOW   ---> GPIO13
+RED      --------> 3.3V
+BLACK    --------> GND
+YELLOW   --------> GPIO13
 ```
 
-Required Pull-up Resistor:
+Required Pull-up Resistor
 
 ```txt
-4.7kΩ
-
-GPIO13 ---- 4.7kΩ ---- 3.3V
+GPIO13 ----- 4.7kΩ ----- 3.3V
 ```
 
 ---
 
 # 🌱 Soil Moisture Sensor
 
-Connection:
+### Connection
 
 ```txt
-Sensor         ESP32-S3
+Sensor             ESP32-S3
 
-VCC      ---> 3.3V
-GND      ---> GND
-AO       ---> GPIO4
+VCC      --------> 3.3V
+GND      --------> GND
+AO       --------> GPIO4
 ```
 
-Reading Type:
+Reading Type
 
 ```txt
-Analog
+Analog ADC
 ```
 
 ---
 
 # 💧 Water Level Sensor
 
-Connection:
+### Connection
 
 ```txt
-Sensor         ESP32-S3
+Sensor             ESP32-S3
 
-VCC      ---> 3.3V
-GND      ---> GND
-AO       ---> ADC Input
+VCC      --------> 3.3V
+GND      --------> GND
+AO       --------> ADC Input
 ```
 
-Reading Type:
+Reading Type
 
 ```txt
-Analog
+Analog ADC
 ```
 
 ---
 
-# 🟢 Green LED
-
-Connection:
+# 🟢 Green Status LED
 
 ```txt
 GPIO10
-  │
+   │
 220Ω
-  │
+   │
  LED
-  │
+   │
  GND
 ```
 
-Purpose:
+Purpose
 
 ```txt
-NORMAL state indicator
+System Normal
 ```
 
 ---
 
-# 🔴 Red LED
-
-Connection:
+# 🔴 Red Status LED
 
 ```txt
 GPIO11
-  │
+   │
 220Ω
-  │
+   │
  LED
-  │
+   │
  GND
 ```
 
-Purpose:
+Purpose
 
 ```txt
-ALERT / CRITICAL indicator
+ALERT / CRITICAL
 ```
 
 ---
 
 # 🚨 Buzzer
 
-Connection:
-
 ```txt
-GPIO12 ---- Buzzer ---- GND
+GPIO12 ------ Buzzer ------ GND
 ```
 
-Purpose:
+Purpose
 
 ```txt
-Alarm notification
+Alarm Notification
 ```
 
 ---
 
 # ⚡ Relay Module
 
-Control Side:
+Controls the Water Pump.
+
+### Control Side
 
 ```txt
-Relay Module      ESP32-S3
+Relay             ESP32-S3
 
-S          ---> GPIO15
-VCC        ---> 5V
-GND        ---> GND
+Signal  --------> GPIO15
+VCC     --------> 5V
+GND     --------> GND
 ```
 
-Power Side:
+### Load Side
 
 ```txt
-5V Supply +
-       │
-       ▼
-
-      COM
-
-      NO
-       │
-
-Fan Positive
+5V Supply
+    │
+   COM
+    │
+   NO
+    │
+Water Pump (+)
 ```
 
-Fan Negative:
+Water Pump (-)
 
 ```txt
 Direct to GND
 ```
 
-Operation:
+---
+
+# 🛡 Flyback Protection Diode
+
+## 1N4007
+
+Installed directly across the water pump terminals.
 
 ```txt
-Relay OFF
-    ↓
-No power to Fan
+        +5V
+         │
+         │
+      Water Pump
+         │
+         │
+        GND
 
-Relay ON
-    ↓
-Fan receives power
+       ┌───────┐
+       │ 1N4007│
+       └───────┘
 ```
+
+Purpose
+
+- Protect relay contacts
+- Suppress voltage spikes
+- Increase hardware reliability
+
+---
+
+# 🔄 Servo Motor
+
+## SG90 Micro Servo
+
+Controls the airflow direction.
+
+### Connection
+
+```txt
+Servo              ESP32-S3
+
+VCC      --------> 5V
+GND      --------> GND
+Signal   --------> GPIO20
+```
+
+### Operating Modes
+
+Automatic
+
+```txt
+Moves automatically when
+the cooling fan is active.
+```
+
+Manual
+
+```txt
+Controlled from the
+Dashboard UP/DOWN buttons
+when the fan is OFF.
+```
+
+---
+
+# ⚡ Power Stabilization Capacitor
+
+## Electrolytic Capacitor
+
+Specifications
+
+```txt
+680µF
+16V
+```
+
+Installation
+
+```txt
+5V
+ │
+ │
+680µF
+ │
+ │
+GND
+```
+
+Purpose
+
+- Servo voltage stabilization
+- Prevent voltage drops
+- Reduce electrical noise
+- Improve ESP32 stability
 
 ---
 
 # 🔌 PC817 Optocouplers
 
-Each climate-control button uses an independent PC817.
+The ESP32 controls the climate controller through isolated PC817 optocouplers.
 
 ---
 
-## FAN Control
+## FAN Button
 
 ```txt
 ESP32 GPIO16
@@ -234,11 +311,9 @@ ESP32 GPIO16
  PC817 Input
 ```
 
-Output side connected across FAN button contacts.
-
 ---
 
-## MIST Control
+## MIST Button
 
 ```txt
 ESP32 GPIO17
@@ -248,11 +323,9 @@ ESP32 GPIO17
  PC817 Input
 ```
 
-Output side connected across MIST button contacts.
-
 ---
 
-## LIGHT Control
+## LIGHT Button
 
 ```txt
 ESP32 GPIO18
@@ -262,11 +335,9 @@ ESP32 GPIO18
  PC817 Input
 ```
 
-Output side connected across LIGHT button contacts.
-
 ---
 
-## TIMER Control
+## TIMER Button
 
 ```txt
 ESP32 GPIO19
@@ -276,96 +347,127 @@ ESP32 GPIO19
  PC817 Input
 ```
 
-Output side connected across TIMER button contacts.
+Output side connected directly across each push-button on the climate controller.
 
 ---
 
-# 🌬 Climate Controller Wiring
+# 🌬 Climate Controller
 
 USB-C Powered Device
 
-Features:
+Integrated Functions
 
 ```txt
-FAN
-MIST
-RGB LIGHT
-TIMER
+Cooling Fan
+
+Humidifier
+
+RGB Light
+
+Timer
 ```
 
-Control Method:
+Control Method
 
 ```txt
 Button Emulation
-using PC817 optocouplers
+
+Using PC817 Optocouplers
 ```
 
-The ESP32 does not directly drive the motors.
+The ESP32 never drives the motors directly.
 
-Instead, it simulates button presses through isolated optocouplers.
+Instead, it simulates button presses while maintaining electrical isolation.
 
 ---
 
-# 📊 Complete Wiring Diagram
+# 📊 Complete Wiring Overview
 
 ```txt
-                  ┌─────────────────┐
-                  │    ESP32-S3     │
-                  └────────┬────────┘
-                           │
-      ┌────────────────────┼────────────────────┐
-      │                    │                    │
+                         KAZTHOR FARM V3.5
 
-      ▼                    ▼                    ▼
+                     ┌────────────────────┐
+                     │     ESP32-S3       │
+                     └─────────┬──────────┘
+                               │
+      ┌──────────────┬──────────┼───────────────┬──────────────┐
+      │              │          │               │              │
+      ▼              ▼          ▼               ▼              ▼
 
-  DS18B20           Soil Sensor        Water Sensor
+  DS18B20      Soil Sensor  Water Sensor     OLED         Buzzer
 
-      │
-      ▼
+                               │
+                               ▼
 
-   OLED SSD1306
+                         FreeRTOS Tasks
 
-      │
-      ▼
+                               │
+                               ▼
 
- Relay Module
+                          MQTT Broker
 
-      │
-      ▼
+                               │
+                               ▼
 
- Climate Controller
+                        Web Dashboard
 
-      │
-      ▼
+                               │
+                               ▼
 
- FAN / MIST / LIGHT
+                      Climate Controller
 
-      ▲
-      │
+          ┌────────────┬────────────┬────────────┬────────────┐
+          │            │            │            │
+          ▼            ▼            ▼            ▼
 
- PC817 Optocouplers
+        Relay       PC817        Servo      OLED Display
 
-      ▲
-      │
+          │
+          ▼
 
- ESP32 GPIO16-19
+     Water Pump
+          │
+      1N4007 Diode
+          │
+      680µF Capacitor
 ```
 
 ---
 
-# ⚠ Notes
+# ⚠ Electrical Notes
 
-* All grounds must be shared.
-* Relay power should use a stable 5V source.
-* Use 4.7kΩ pull-up resistor on DS18B20.
-* Use 220Ω resistors on LEDs.
-* Use 1kΩ resistors on PC817 inputs.
-* Verify GPIO assignments before flashing firmware.
+- All grounds must be connected together.
+- Use a stable 5V power supply for the relay and servo.
+- Install a 4.7kΩ pull-up resistor on the DS18B20.
+- Use 220Ω resistors for both LEDs.
+- Use 1kΩ resistors on every PC817 input.
+- Install the 1N4007 diode directly across the water pump terminals.
+- Install the 680µF / 16V capacitor near the servo power supply.
+- Verify GPIO assignments before flashing the firmware.
 
 ---
 
-Author:
+# ✅ Wiring Checklist
 
-Antonio Castor Silva
+Before powering the system verify:
 
-KAZTHOR LABS
+- OLED connected correctly
+- DS18B20 pull-up resistor installed
+- Relay powered with stable 5V
+- Servo powered correctly
+- Capacitor installed
+- Flyback diode installed
+- PC817 wiring verified
+- Shared GND
+- MQTT communication tested
+- Dashboard control verified
+
+---
+
+# 👨‍💻 Author
+
+**Antonio Castor Silva**
+
+Founder of **KAZTHOR LABS**
+
+Embedded Systems • ESP-IDF • FreeRTOS • IoT • Smart Farming • Automation

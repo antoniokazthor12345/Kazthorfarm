@@ -1,0 +1,41 @@
+# ESP-IDF Partition Table
+# KAZTHOR FARM
+# Version: V3.5
+#
+# Flash Layout (16 MB)
+#
+# Name,     Type, SubType, Offset,   Size,     Flags
+
+# --------------------------------------------------------------------
+# System Data
+# --------------------------------------------------------------------
+nvs,        data, nvs,     0x9000,   0x8000,
+otadata,    data, ota,     0x11000,  0x2000,
+phy_init,   data, phy,     0x13000,  0x1000,
+
+# --------------------------------------------------------------------
+# Main Firmware
+# --------------------------------------------------------------------
+factory,    app,  factory, 0x20000,  6M,
+
+# --------------------------------------------------------------------
+# Web Dashboard (SPIFFS)
+# HTML
+# CSS
+# JavaScript
+# Images
+# Icons
+# Configuration Files
+# --------------------------------------------------------------------
+storage,    data, spiffs,           , 8M,
+
+# --------------------------------------------------------------------
+# Logs & Historical Data
+# Future Versions:
+# - Event Logs
+# - MQTT Logs
+# - Historical Measurements
+# - AI Data
+# - Calibration Files
+# --------------------------------------------------------------------
+logs,       data, fat,              , 2M,

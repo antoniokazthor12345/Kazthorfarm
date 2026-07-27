@@ -1,40 +1,42 @@
 # 🌐 MQTT Topics
 
-# KAZTHOR FARM V1
+# 🌱 KAZTHOR FARM V3.5
 
-This document describes the MQTT communication used by KAZTHOR FARM V1.
+**MQTT Communication Documentation**
 
----
-
-# 📡 Broker
-
-Cloud MQTT Broker:
-
-```txt
-HiveMQ Cloud
-```
-
-Connection type:
-
-```txt
-Secure MQTT / MQTT over WebSockets
-```
-
-Used by:
-
-* ESP32-S3 firmware
-* Web dashboard
-* Remote monitoring system
+This document describes the MQTT communication architecture used by **KAZTHOR FARM V3.5**.
 
 ---
 
-# 🧭 Base Topic
+# 📡 MQTT Broker
+
+## HiveMQ Cloud
+
+Communication is handled using **HiveMQ Cloud**.
+
+### Connection Type
+
+```txt
+Secure MQTT
+MQTT over WebSockets
+TLS Encryption
+```
+
+### Used By
+
+- ESP32-S3 Firmware
+- Web Dashboard
+- Remote Monitoring System
+
+---
+
+# 📂 Base Topic
 
 ```txt
 kazthor/farm01
 ```
 
-All project topics are structured from this base topic.
+All MQTT topics are organized from this base topic.
 
 ---
 
@@ -46,19 +48,19 @@ All project topics are structured from this base topic.
 kazthor/farm01/data
 ```
 
-Published by:
+Published by
 
 ```txt
 ESP32-S3
 ```
 
-Used by:
+Consumed by
 
 ```txt
 Dashboard
 ```
 
-Example payload:
+### Example Payload
 
 ```json
 {
@@ -67,10 +69,11 @@ Example payload:
   "water": 55,
   "state": "NORMAL",
   "pump": false,
-  "temp_ok": true,
-  "fan": 0,
-  "mist": 0,
-  "relay": false
+  "relay": false,
+  "fan": 2,
+  "mist": 1,
+  "servo": 90,
+  "light": false
 }
 ```
 
@@ -82,15 +85,16 @@ Example payload:
 kazthor/farm01/status
 ```
 
-Example payload:
+### Example Payload
 
 ```json
 {
-  "device": "kazthor-farm-v1",
+  "device": "kazthor-farm-v35",
+  "version": "3.5",
   "online": true,
   "wifi": true,
   "mqtt": true,
-  "uptime": 120
+  "uptime": 2540
 }
 ```
 
@@ -102,15 +106,34 @@ Example payload:
 kazthor/farm01/alerts
 ```
 
-Example payload:
+### Example Payload
 
 ```json
 {
   "level": "CRITICAL",
-  "message": "High temperature or low soil moisture detected",
+  "message": "High temperature detected",
   "temp": 36.2,
   "soil": 18,
   "water": 42
+}
+```
+
+---
+
+## Heartbeat
+
+```txt
+kazthor/farm01/heartbeat
+```
+
+Published periodically to indicate that the ESP32-S3 is still connected.
+
+Example
+
+```json
+{
+    "alive": true,
+    "timestamp": 1722470200
 }
 ```
 
@@ -124,13 +147,13 @@ Example payload:
 kazthor/farm01/cmd
 ```
 
-Subscribed by:
+Subscribed by
 
 ```txt
 ESP32-S3
 ```
 
-Used by:
+Published by
 
 ```txt
 Dashboard
@@ -140,35 +163,31 @@ Dashboard
 
 # 🎛️ Command Payloads
 
-## Turn Relay ON
+## Water Pump
 
 ```json
 {
-  "relay": true
+    "relay": true
+}
+```
+
+```json
+{
+    "relay": false
 }
 ```
 
 ---
 
-## Turn Relay OFF
+## Fan Speed
 
 ```json
 {
-  "relay": false
+    "fan": 3
 }
 ```
 
----
-
-## Set FAN Level
-
-```json
-{
-  "fan": 3
-}
-```
-
-Valid values:
+Valid Values
 
 ```txt
 0 = OFF
@@ -179,15 +198,15 @@ Valid values:
 
 ---
 
-## Set MIST Level
+## Humidifier
 
 ```json
 {
-  "mist": 3
+    "mist": 2
 }
 ```
 
-Valid values:
+Valid Values
 
 ```txt
 0 = OFF
@@ -198,33 +217,71 @@ Valid values:
 
 ---
 
-## Turn Light ON/OFF
+## RGB Light
 
 ```json
 {
-  "light": true
+    "light": true
 }
 ```
 
 ```json
 {
-  "light": false
+    "light": false
 }
 ```
 
 ---
 
-## System Mode
+## Servo Position
+
+Manual positioning.
 
 ```json
 {
-  "mode": "AUTO"
+    "servo": 0
 }
 ```
 
 ```json
 {
-  "mode": "MANUAL"
+    "servo": 45
+}
+```
+
+```json
+{
+    "servo": 90
+}
+```
+
+```json
+{
+    "servo": 135
+}
+```
+
+```json
+{
+    "servo": 180
+}
+```
+
+The servo can also be controlled using the Dashboard UP and DOWN buttons when the cooling fan is OFF.
+
+---
+
+## Operating Mode
+
+```json
+{
+    "mode": "AUTO"
+}
+```
+
+```json
+{
+    "mode": "MANUAL"
 }
 ```
 
@@ -236,30 +293,29 @@ Valid values:
 
 ```json
 {
-  "state": "NORMAL"
+    "state":"NORMAL"
 }
 ```
 
-Meaning:
+Meaning
 
-* Temperature is safe
-* Soil humidity is acceptable
-* No critical alert
+- Environmental conditions are within acceptable limits.
+- No automatic actions required.
 
 ---
 
-## ALERTA
+## ALERT
 
 ```json
 {
-  "state": "ALERTA"
+    "state":"ALERT"
 }
 ```
 
-Meaning:
+Meaning
 
-* Soil moisture is below recommended level
-* Climate control may be activated
+- Soil moisture is below the recommended threshold.
+- Climate control may activate automatically.
 
 ---
 
@@ -267,124 +323,194 @@ Meaning:
 
 ```json
 {
-  "state": "CRITICAL"
+    "state":"CRITICAL"
 }
 ```
 
-Meaning:
+Meaning
 
-* Temperature is too high
-* Soil moisture is critically low
-* Alarm actions are activated
+- High temperature detected.
+- Soil moisture critically low.
+- Automatic emergency actions enabled.
+- Audible alarm activated.
 
 ---
 
 # 🔁 MQTT Data Flow
 
 ```txt
+                 Sensors
+                     │
+                     ▼
+               ESP32-S3 Firmware
+                     │
+      ┌──────────────┼───────────────┐
+      │              │               │
+      ▼              ▼               ▼
+
+   Sensor Data     Status         Alerts
+      │              │               │
+      └──────────────┼───────────────┘
+                     ▼
+
+             HiveMQ Cloud Broker
+
+                     ▲
+
+      ┌──────────────┼──────────────┐
+      │              │              │
+
+ Dashboard      Mobile Apps     MQTT Clients
+
+      │
+      ▼
+
+Publish Commands
+
+      │
+
+      ▼
+
 ESP32-S3
-   │
-   ├── publishes sensor data
-   │       └── kazthor/farm01/data
-   │
-   ├── publishes system status
-   │       └── kazthor/farm01/status
-   │
-   ├── publishes alerts
-   │       └── kazthor/farm01/alerts
-   │
-   ▼
 
-HiveMQ Cloud Broker
+      │
 
-   ▲
-   │
-   └── Dashboard subscribes to:
-           kazthor/farm01/data
-           kazthor/farm01/status
-           kazthor/farm01/alerts
+      ▼
 
-
-Dashboard
-   │
-   └── publishes commands to:
-           kazthor/farm01/cmd
-
-ESP32-S3
-   │
-   └── receives commands and controls:
-           Relay
-           FAN
-           MIST
-           LIGHT
+Pump
+Fan
+Humidifier
+Servo
+OLED
+Relay
 ```
 
 ---
 
-# 🧪 Testing with MQTT Client
+# 📊 Dashboard Features
 
-You can test the project using any MQTT client.
+The Dashboard can
 
-Recommended clients:
+- Display temperature
+- Display soil moisture
+- Display water level
+- Display current system state
+- Display fan level
+- Display humidifier level
+- Display relay state
+- Display servo position
+- Control actuators in real time
+- Send MQTT commands
+- Receive live telemetry
 
-* MQTTX
-* HiveMQ Web Client
-* Mosquitto CLI
+---
 
-Example subscribe:
+# 🧪 Testing
+
+The project can be tested using
+
+- MQTTX
+- HiveMQ Web Client
+- Mosquitto CLI
+
+Example Subscription
 
 ```txt
 kazthor/farm01/data
 ```
 
-Example publish command:
+Example Publish
 
 ```json
 {
-  "fan": 1
+    "fan":1
 }
 ```
 
 ---
 
-# 🔐 Security Notes
+# 🔐 Security
 
-Do not upload real broker credentials to GitHub.
-
-Avoid publishing:
+Never upload
 
 ```txt
 WiFi SSID
-WiFi password
-MQTT username
-MQTT password
+WiFi Password
+MQTT Username
+MQTT Password
 Broker URL
+Certificates
+API Keys
 ```
 
-Recommended approach:
+Recommended
 
 ```txt
-Use config files excluded by .gitignore
-or placeholder values inside example files.
+Store credentials in configuration files
+ignored by Git using .gitignore.
 ```
 
 ---
 
 # ✅ MQTT Checklist
 
-Before publishing the repository, verify:
+Before publishing a new release verify
 
-* MQTT credentials are hidden.
-* Topics match firmware code.
-* Topics match dashboard code.
-* Payload keys are consistent.
-* Dashboard reconnects if broker disconnects.
-* ESP32 reconnects if WiFi or MQTT fails.
+- MQTT credentials removed
+- Broker credentials hidden
+- Dashboard topics updated
+- Firmware topics updated
+- JSON payloads synchronized
+- Dashboard reconnect works
+- ESP32 reconnect works
+- Heartbeat active
+- Servo commands working
+- Automatic mode tested
+- Manual mode tested
 
 ---
 
-Author:
+# 🚀 Future MQTT Features
 
-Antonio Castor Silva
+## V4
 
-KAZTHOR LABS
+- Greenhouse telemetry
+- Plant monitoring
+
+## V4.5
+
+- Hydroponic telemetry
+- Water quality monitoring
+- Reservoir analytics
+
+## V5
+
+- Camera status
+- AI inference results
+- Plant health reports
+
+## V6
+
+- LoRa Gateway
+- Remote MQTT Bridge
+
+## V7
+
+- Multi-node architecture
+- STM32 communication
+
+## V8
+
+- Robot telemetry
+- Drone telemetry
+- Autonomous mission control
+
+---
+
+# 👨‍💻 Author
+
+**Antonio Castor Silva**
+
+Founder of **KAZTHOR LABS**
+
+Embedded Systems • ESP32 • ESP-IDF • FreeRTOS • MQTT • IoT • Smart Farming

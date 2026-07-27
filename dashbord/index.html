@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAZTHOR FARM</title>
+    <title>KAZTHOR FARM v3.5</title>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -242,6 +242,36 @@
             transform: scale(1.04);
         }
 
+        .servo-row {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .btn-servo {
+            flex: 1;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            background: #263238;
+            color: #40c4ff;
+            border: 1px solid #37474f;
+            transition: all 0.2s;
+        }
+
+        .btn-servo:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+
+        .btn-servo:active {
+            transform: scale(0.95);
+        }
+
         .pump-section {
             background: #1a1a1a;
             border-radius: 14px;
@@ -374,6 +404,10 @@
                 <button class="btn-level btn-l2" onclick="sendDeviceCmd('fan',2)">2</button>
                 <button class="btn-level btn-l3" onclick="sendDeviceCmd('fan',3)">3</button>
             </div>
+            <div class="servo-row">
+                <button class="btn-servo" onclick="sendServoCmd('up')">▲ Subir</button>
+                <button class="btn-servo" onclick="sendServoCmd('down')">▼ Bajar</button>
+            </div>
         </div>
 
         <div class="device-card">
@@ -449,9 +483,9 @@
     </div>
 
     <script>
-        const MQTT_HOST = "**********************************";
-        const MQTT_USER = "**********************************";
-        const MQTT_PASS = "**********************************";
+        const MQTT_HOST = "wss://e84759a55845492391712e815f79477b.s1.eu.hivemq.cloud:8884/mqtt";
+        const MQTT_USER = "*********";
+        const MQTT_PASS = "*********";
 
         const TOPIC_DATA = "kazthor/farm01/data";
         const TOPIC_STATUS = "kazthor/farm01/status";
@@ -663,6 +697,12 @@
             payload[device] = value;
             client.publish(TOPIC_CMD, JSON.stringify(payload));
             console.log("[CMD]", JSON.stringify(payload));
+        }
+
+        function sendServoCmd(direction) {
+            if (!client.connected) { alert("MQTT no conectado"); return; }
+            client.publish(TOPIC_CMD, JSON.stringify({ servo: direction }));
+            console.log("[CMD SERVO]", direction);
         }
 
         function sendLightCmd(action) {

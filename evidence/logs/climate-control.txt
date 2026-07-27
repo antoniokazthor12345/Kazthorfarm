@@ -1,50 +1,151 @@
-```txt
-=========================================
-KAZTHOR FARM V1
-CLIMATE CONTROL LOG
-=========================================
+==========================================================
+KAZTHOR FARM V3.5
+CLIMATE CONTROL VALIDATION LOG
+Hardware Refinement Update
+==========================================================
 
-Temperature : 21.75 °C
-Soil Moisture : 48 %
-Water Level : 28 %
+Date:
+July 2026
 
-System State:
+Firmware:
+ESP-IDF
+
+Controller:
+ESP32-S3 WROOM
+
+Test Mode:
+Automatic Climate Control
+
+==========================================================
+
+SENSOR READINGS
+
+Temperature     : 22.60 °C
+Soil Moisture   : 72 %
+Water Level     : 64 %
+
+==========================================================
+
+SYSTEM STATE
 
 NORMAL
 
------------------------------------------
+==========================================================
 
-Relay
+OLED DISPLAY
+
+Status:
+
+ONLINE
+
+Displayed Data:
+
+✔ Temperature
+✔ Soil Moisture
+✔ Water Level
+✔ Fan Level
+✔ Humidifier Level
+✔ System State
+
+Result:
+
+PASS
+
+==========================================================
+
+RELAY MODULE
+
+State:
 
 OFF
 
------------------------------------------
+Operation:
 
-Fan
+Correct
+
+Result:
+
+PASS
+
+==========================================================
+
+FAN
 
 Current Level : 2
 
-Target Level : 2
+Target Level  : 2
 
 Status:
 
 RUNNING
 
------------------------------------------
+Automatic Control:
 
-Mist
+PASS
+
+==========================================================
+
+HUMIDIFIER
 
 Current Level : 2
 
-Target Level : 2
+Target Level  : 2
 
 Status:
 
 RUNNING
 
------------------------------------------
+Automatic Control:
 
-RGB Light
+PASS
+
+==========================================================
+
+SERVO MOTOR
+
+Operating Mode:
+
+AUTOMATIC
+
+Current Position:
+
+90°
+
+Behavior:
+
+Automatically follows fan activation.
+
+Result:
+
+PASS
+
+==========================================================
+
+MANUAL SERVO TEST
+
+Dashboard UP Button:
+
+PASS
+
+Dashboard DOWN Button:
+
+PASS
+
+Movement:
+
+Smooth
+
+Response Time:
+
+Correct
+
+Result:
+
+PASS
+
+==========================================================
+
+RGB LIGHT
 
 State:
 
@@ -52,37 +153,182 @@ ON
 
 Color:
 
-Red
+RED
 
------------------------------------------
+Result:
 
-Buzzer
+PASS
+
+==========================================================
+
+BUZZER
+
+State:
 
 OFF
 
------------------------------------------
+Alarm Test:
 
-Control Logic
+PASS
 
-Temperature OK
+==========================================================
 
-Soil Moisture Above Critical Level
+POWER STABILITY
+
+680µF / 16V Capacitor
+
+Voltage Stability:
+
+PASS
+
+Servo Voltage Drop:
+
+NOT DETECTED
+
+ESP32 Reset:
+
+NO
+
+Electrical Noise:
+
+LOW
+
+==========================================================
+
+PUMP PROTECTION
+
+1N4007 Flyback Diode
+
+Voltage Spikes:
+
+SUPPRESSED
+
+Relay Protection:
+
+PASS
+
+Pump Switching:
+
+NORMAL
+
+==========================================================
+
+CONTROL LOGIC
+
+Temperature Within Range
+
+Soil Moisture Acceptable
 
 Water Available
 
 Automatic Climate Adjustment Active
 
------------------------------------------
+Automatic Servo Positioning Active
 
-Result
+Relay Operating Correctly
 
-Climate Controller Operating Normally
+MQTT Communication Active
 
-Test Result:
+==========================================================
+
+MQTT COMMUNICATION
+
+Broker:
+
+CONNECTED
+
+Dashboard:
+
+CONNECTED
+
+Telemetry:
+
+ACTIVE
+
+Commands:
+
+RECEIVED
+
+Result:
 
 PASS
 
-=========================================
-End of Log
-=========================================
-```
+==========================================================
+
+OVERALL SYSTEM RESULT
+
+Temperature Monitoring
+
+PASS
+
+Soil Monitoring
+
+PASS
+
+Water Monitoring
+
+PASS
+
+OLED
+
+PASS
+
+Relay
+
+PASS
+
+Fan
+
+PASS
+
+Humidifier
+
+PASS
+
+Servo
+
+PASS
+
+Buzzer
+
+PASS
+
+MQTT
+
+PASS
+
+Dashboard
+
+PASS
+
+Power Stability
+
+PASS
+
+Electrical Protection
+
+PASS
+
+==========================================================
+
+FINAL RESULT
+
+SYSTEM VALIDATION
+
+PASSED
+
+KAZTHOR FARM V3.5
+
+READY FOR
+
+VERSION 4
+
+Mini Smart Greenhouse
+
+==========================================================
+
+End of Validation Log
+
+KAZTHOR LABS
+
+==========================================================

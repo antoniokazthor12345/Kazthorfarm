@@ -1,309 +1,143 @@
-# 🌱🤖 KAZTHOR FARM V3
+# 🌱🤖 KAZTHOR FARM V3.5
 
-## Smart IoT Hydroponic Automation System
+<div align="center">
 
-Sistema inteligente de monitoreo y automatización para cultivos hidropónicos utilizando **ESP32-S3, ESP-IDF, FreeRTOS, MQTT y Dashboard Web en tiempo real**.
+## Smart IoT Agriculture Platform
 
-KAZTHOR FARM V3 forma parte del ecosistema **KAZTHOR LABS**, una plataforma de desarrollo enfocada en sistemas embebidos, Internet de las Cosas (IoT), automatización e integración hardware/software.
+**ESP32-S3 • ESP-IDF • FreeRTOS • MQTT • Web Dashboard • Smart Automation**
 
----
+An open-source smart agriculture platform designed for environmental monitoring, automation, and future AI integration.
 
-## 🌐 Demo Online
+Developed by **KAZTHOR LABS**
 
-Puedes probar el dashboard web del proyecto:
-
-[🌐 Live Dashboard](https://antoniokazthor12345.github.io/Kazthorfarm/)
+</div>
 
 ---
 
-# 🎥 Project Demo
+## 📌 Overview
 
-Video completo de demostración:
+**KAZTHOR FARM** is an open-source embedded systems project focused on building a modern smart agriculture platform using the **ESP32-S3**.
 
-▶️ YouTube:
+The project combines environmental sensing, IoT communication, automation, and a real-time web dashboard into a modular architecture designed for future expansion with artificial intelligence, computer vision, and distributed monitoring.
+
+Unlike a traditional hydroponic controller, KAZTHOR FARM is intended to become a complete research and development platform for embedded agriculture technologies.
+
+---
+
+## ✨ What's New in Version 3.5
+
+Version **3.5** introduces major improvements in mechanical design, electrical reliability, and user interaction.
+
+### 🚀 New Features
+
+- SG90 servo motor for automatic fan positioning.
+- Manual fan positioning from the dashboard.
+- Automatic fan positioning mode.
+- 680µF power stabilization capacitor.
+- 1N4007 flyback protection diode.
+- Improved enclosure cable management.
+- Optimized OLED display location.
+- Enhanced dashboard responsiveness.
+- Improved relay stability.
+- Updated validation reports.
+- Expanded technical documentation.
+
+---
+
+## 🌐 Live Dashboard
+
+Experience the real-time dashboard directly from GitHub Pages.
+
+🔗 https://antoniokazthor12345.github.io/Kazthorfarm/
+
+---
+
+## 🎥 Project Demonstration
+
+Watch the complete project demonstration.
+
+📺 YouTube
+
 https://www.youtube.com/watch?v=l3PrIL1JVCo
 
 ---
 
 # 🚀 Quick Preview
 
-![KAZTHOR FARM V3 Demo](media/demo/demo.gif)
-
-El sistema permite:
-
-* Monitoreo de temperatura en tiempo real.
-* Lectura de humedad del suelo.
-* Supervisión del nivel de agua.
-* Control automático de ventilación.
-* Control de humidificación.
-* Control de iluminación.
-* Sistema de alarmas.
-* Comunicación IoT mediante MQTT.
-* Control remoto mediante dashboard web.
+![KAZTHOR FARM Demo](media/demo/demo.gif)
 
 ---
 
-# 📖 Overview
+## 🌟 Key Features
 
-KAZTHOR FARM V3 es un sistema IoT diseñado para automatizar y supervisar un cultivo hidropónico doméstico.
+KAZTHOR FARM provides a complete embedded monitoring and automation platform including:
 
-El objetivo principal del proyecto es crear una plataforma capaz de:
-
-* Obtener información ambiental mediante sensores.
-* Procesar datos localmente.
-* Tomar decisiones automáticas.
-* Controlar dispositivos físicos.
-* Mostrar información en una interfaz web.
-* Mantener comunicación bidireccional entre hardware y software.
-
-El proyecto evolucionó desde un prototipo basado en ESP32 DevKit hasta una arquitectura más robusta utilizando ESP32-S3 y ESP-IDF.
+- 🌡️ Real-time temperature monitoring
+- 🌱 Soil moisture monitoring
+- 💧 Water level monitoring
+- 🌬️ Automatic climate control
+- 🤖 Servo-controlled fan positioning
+- 💡 RGB lighting control
+- 💦 Humidifier control
+- 🚰 Water pump automation
+- 📺 OLED monitoring display
+- 🌐 MQTT communication
+- 📊 Web dashboard
+- 📱 Remote monitoring
+- ⚡ FreeRTOS multitasking
+- 📡 ESP-IDF professional firmware architecture
 
 ---
 
 # 🎯 Project Goals
 
-Los principales objetivos del proyecto son:
+The long-term objective of KAZTHOR FARM is to create a scalable embedded platform capable of supporting modern smart agriculture technologies.
 
-* Crear un sistema de agricultura inteligente basado en IoT.
-* Automatizar procesos que normalmente requieren supervisión manual.
-* Desarrollar una arquitectura escalable.
-* Implementar comunicación en tiempo real.
-* Integrar sensores, actuadores y software web.
-* Crear una base para futuras versiones con inteligencia artificial y visión por computadora.
+Current goals include:
+
+- Environmental monitoring
+- Intelligent automation
+- Remote IoT communication
+- Modular firmware architecture
+- Reliable embedded hardware
+- Future AI integration
+- Computer vision
+- Predictive agriculture
 
 ---
 
 # 🔄 Project Evolution
 
-## ESP32 DevKit V1 → ESP32-S3
+## ESP32 DevKit → ESP32-S3
 
-La primera versión del proyecto fue desarrollada utilizando un ESP32 DevKit V1.
+The project originally started using a conventional ESP32 DevKit board.
 
-Con esta plataforma fue posible:
+As the project evolved, additional processing power, memory, and future scalability became necessary.
 
-* Crear el primer prototipo.
-* Validar sensores.
-* Desarrollar el dashboard.
-* Implementar comunicación MQTT.
+Migration to the **ESP32-S3 WROOM N16R8** provided:
 
-Posteriormente el proyecto migró al ESP32-S3 debido a la necesidad de contar con mayores capacidades para futuras expansiones.
+- Native USB support
+- Dual-Core architecture
+- 16 MB Flash
+- 8 MB PSRAM
+- Improved processing performance
+- Better support for ESP-IDF
+- Future camera integration
+- AI-ready hardware platform
 
-El ESP32-S3 ofrece:
-
-* Mayor memoria.
-* Mejor capacidad de procesamiento.
-* USB nativo.
-* Mayor posibilidad de integración con cámaras.
-* Preparación para visión por computadora e inteligencia artificial.
-
-La migración permitió construir una arquitectura más preparada para futuras versiones.
+Today, KAZTHOR FARM is built entirely around the ESP-IDF ecosystem, providing a more robust architecture for future development.
 
 ---
 
-# ⚙️ Hardware
+# 🚦 System Operating States
 
-## Main Controller
-
-### ESP32-S3 WROOM N16R8
-
-Características principales:
-
-* Dual Core Processor.
-* WiFi integrado.
-* Bluetooth.
-* 8MB PSRAM.
-* Compatible con ESP-IDF.
-* Soporte para FreeRTOS.
+KAZTHOR FARM continuously evaluates environmental conditions and automatically adjusts the climate controller based on three operating modes.
 
 ---
 
-# 🌡️ Sensors
+# 🟢 NORMAL
 
-## DS18B20 Temperature Sensor
-
-Mide la temperatura del sistema.
-
----
-
-## Soil Moisture Sensor
-
-Permite conocer la humedad del sustrato.
-
----
-
-## Water Level Sensor
-
-Supervisa la disponibilidad de agua para el sistema.
-
----
-
-# 🖥️ User Interface
-
-## OLED Display SSD1306
-
-Pantalla OLED 128x64 mediante comunicación I2C.
-
-Muestra:
-
-* Temperatura.
-* Humedad.
-* Nivel de agua.
-* Estado del sistema.
-* Estado MQTT.
-* Alertas.
-
----
-
-# ⚡ Actuators
-
-## Climate Controller
-
-Sistema comercial adaptado para control mediante ESP32.
-
-Funciones:
-
-* FAN (3 niveles).
-* MIST / Humidificación (3 niveles).
-* RGB Lighting.
-* Timer.
-* Alarm.
-
-El control se realiza utilizando optoacopladores **PC817**, simulando la pulsación de botones sin modificar la electrónica original del dispositivo.
-
----
-
-## Relay Module
-
-Control de bomba de agua con aislamiento eléctrico.
-
----
-
-## Indicators
-
-LEDs:
-
-* Estado normal.
-* Estado de alarma.
-
----
-
-## Buzzer
-
-Sistema de alerta sonora.
-
----
-
-# 🧠 Software Architecture
-
-El firmware fue desarrollado utilizando:
-
-## ESP-IDF
-
-Framework oficial de Espressif para desarrollo profesional con ESP32.
-
----
-
-# FreeRTOS Tasks
-
-El sistema utiliza una arquitectura basada en tareas independientes.
-
-## sensor_task
-
-Responsable de:
-
-* Lectura de temperatura.
-* Lectura de humedad.
-* Lectura de nivel de agua.
-
----
-
-## control_task
-
-Motor de decisiones del sistema.
-
-Controla:
-
-* Ventilador.
-* Humidificador.
-* Bomba.
-* LEDs.
-* Alarma.
-
----
-
-## display_task
-
-Actualización de información en pantalla OLED.
-
----
-
-## mqtt_task
-
-Comunicación con el dashboard mediante MQTT.
-
----
-
-# 🌐 MQTT Communication
-
-MQTT significa:
-
-**Message Queuing Telemetry Transport**
-
-Es un protocolo ligero diseñado para comunicación entre dispositivos IoT.
-
-El ESP32 publica información del sistema y recibe comandos desde el dashboard.
-
----
-
-## Publish Topics
-
-```txt
-kazthor/farm01/data
-
-kazthor/farm01/status
-
-kazthor/farm01/alerts
-```
-
----
-
-## Subscribe Topic
-
-```txt
-kazthor/farm01/cmd
-```
-
----
-
-# 📊 Web Dashboard
-
-Dashboard desarrollado utilizando:
-
-* HTML.
-* CSS.
-* JavaScript.
-* MQTT over WebSockets.
-* Chart.js.
-
-Funciones:
-
-* Visualización en tiempo real.
-* Control manual de dispositivos.
-* Estado del sistema.
-* Gráficas.
-* Comunicación bidireccional con ESP32.
-
----
-
-# 🚦 System States
-
-El sistema cuenta con tres estados principales.
-
----
-
-# NORMAL
-
-Condiciones:
+### Conditions
 
 ```txt
 Temperature < 35°C
@@ -311,32 +145,36 @@ Temperature < 35°C
 Soil Moisture >= 40%
 ```
 
-Acciones:
+### System Behavior
 
-* Sistema estable.
-* LED verde activo.
-* Sin alarmas.
+- Green status LED ON.
+- Normal environmental monitoring.
+- Automatic climate regulation.
+- Dashboard reports NORMAL status.
+- No alarms generated.
 
 ---
 
-# ALERTA
+# 🟡 ALERT
 
-Condición:
+### Conditions
 
 ```txt
 Soil Moisture < 40%
 ```
 
-Acciones:
+### System Behavior
 
-* Ajustes de climatización.
-* Indicadores de advertencia.
+- Preventive climate adjustments.
+- Increased monitoring frequency.
+- Dashboard warning indicators.
+- Automatic corrective actions when required.
 
 ---
 
-# CRITICAL
+# 🔴 CRITICAL
 
-Condiciones:
+### Conditions
 
 ```txt
 Temperature >= 35°C
@@ -346,181 +184,363 @@ OR
 Soil Moisture < 20%
 ```
 
-Acciones:
+### System Behavior
 
-* FAN nivel 3.
-* MIST nivel 3.
-* Relay activado.
-* LED rojo.
-* Buzzer.
-
----
-
-# 🔌 Wiring Summary
-
-## OLED
-
-```txt
-SDA -> GPIO 8
-
-SCL -> GPIO 9
-```
+- Fan Level 3 activated.
+- Mist Level 3 activated.
+- Water pump relay enabled.
+- Red status LED ON.
+- Audible buzzer alarm.
+- Dashboard displays CRITICAL status.
+- MQTT alert notification.
 
 ---
 
-## DS18B20
+# 🔌 Hardware Connections
+
+The following table summarizes the primary hardware connections used in KAZTHOR FARM V3.5.
+
+| Device | GPIO |
+|---------|------|
+| OLED SDA | GPIO 8 |
+| OLED SCL | GPIO 9 |
+| DS18B20 | GPIO 13 |
+| Soil Moisture Sensor | GPIO 4 |
+| Water Pump Relay | GPIO 15 |
+| Green LED | GPIO 10 |
+| Red LED | GPIO 11 |
+| Buzzer | GPIO 12 |
+| Servo SG90 | *(Configured in firmware)* |
+
+**DS18B20 Pull-up Resistor**
 
 ```txt
-DATA -> GPIO 13
-
-Pull-up 4.7kΩ
-```
-
----
-
-## Soil Sensor
-
-```txt
-GPIO 4
-```
-
----
-
-## LEDs
-
-```txt
-Green -> GPIO 10
-
-Red -> GPIO 11
-```
-
----
-
-## Buzzer
-
-```txt
-GPIO 12
-```
-
----
-
-## Relay
-
-```txt
-GPIO 15
+4.7kΩ between DATA and 3.3V
 ```
 
 ---
 
 # 📁 Repository Structure
 
-```txt
-KAZTHOR-FARM-V3
+```text
+KAZTHOR-FARM
 
 │
-├── firmware
-│   └── ESP32-S3
+├── firmware/
+│   └── esp32-s3/
 │
-├── dashboard
+├── dashboard/
+│   ├── css/
+│   ├── js/
+│   ├── images/
+│   └── index.html
 │
-├── docs
+├── docs/
 │
-├── media
-│   ├── demo.gif
-│   ├── dashboard.webp
-│   └── prototype.webp
+├── media/
+│   ├── hardware/
+│   ├── dashboard/
+│   ├── enclosure/
+│   └── demo/
 │
-├── evidence
+├── validation/
+│   ├── hardware/
+│   ├── mqtt/
+│   ├── dashboard/
+│   └── functional/
 │
 ├── README.md
-│
+├── CHANGELOG.md
+├── partitions.csv
 └── LICENSE
 ```
 
 ---
 
-# 📸 Project Evidence
+# 📸 Project Gallery
 
-El repositorio incluye:
+The repository includes technical documentation and validation material for every project stage.
 
-* Fotografías del hardware.
-* Diagramas de conexión.
-* Capturas del dashboard.
-* Logs del sistema.
-* Evidencia de pruebas.
-* Videos de demostración.
+### Hardware
+
+- Complete hardware photographs.
+- Internal enclosure layout.
+- Cable management.
+- Servo integration.
+- Cooling system.
+- Relay protection improvements.
+
+### Dashboard
+
+- Web dashboard screenshots.
+- Real-time monitoring.
+- Manual controls.
+- MQTT communication.
+- System status indicators.
+
+### Documentation
+
+- Wiring diagrams.
+- Validation reports.
+- Functional testing.
+- Hardware verification.
+- MQTT testing.
+- Development logs.
 
 ---
 
-# 🛣️ Roadmap
+# 🛣️ Development Roadmap
 
-# ✅ KAZTHOR FARM V3
+## ✅ Version 3.5
 
-Estado actual:
+Current Release
 
-* ESP32-S3 migration.
-* ESP-IDF implementation.
-* FreeRTOS architecture.
-* MQTT communication.
-* Web dashboard.
-* OLED monitoring.
-* Automatic climate control.
-* FAN/MIST commercial device integration.
+### Hardware
+
+- ESP32-S3 WROOM N16R8
+- Servo-assisted fan positioning
+- Relay-controlled water pump
+- Power stabilization capacitor
+- Flyback protection diode
+- Improved enclosure layout
+
+### Software
+
+- ESP-IDF
+- FreeRTOS
+- MQTT
+- Web Dashboard
+- Automatic Climate Control
+- OLED Interface
+
+### Features
+
+- Real-time monitoring
+- Manual dashboard controls
+- Automatic fan positioning
+- Climate automation
+- IoT connectivity
 
 ---
 
-# 🚧 KAZTHOR FARM V4
+# 🚀 Version 4
 
-Próximas mejoras:
+## Smart Greenhouse
 
-* ESP32-S3 Camera.
-* Captura de imágenes.
-* Visión por computadora.
-* Inteligencia artificial.
-* Análisis del crecimiento de plantas.
-* Historial de datos.
-* Notificaciones automáticas.
+Planned features include:
+
+- Mini greenhouse prototype.
+- Real plant cultivation.
+- Environmental validation.
+- Long-term monitoring.
+- Climate optimization.
+- Historical data logging.
+- Improved dashboard.
+- Automatic notifications.
+
+---
+
+# 🌿 Version 4.5
+
+## Hydroponic Expansion
+
+Planned improvements:
+
+- Hydroponic nutrient monitoring.
+- Water quality analysis.
+- Additional environmental sensors.
+- Improved irrigation management.
+
+---
+
+# 🤖 Version 5
+
+## Computer Vision & AI
+
+Future development:
+
+- ESP32-S3 Camera integration.
+- Plant image capture.
+- Computer vision.
+- AI-assisted monitoring.
+- Disease detection.
+- Plant growth analysis.
+
+---
+
+# 📡 Version 6
+
+## Distributed Agriculture
+
+- LoRa communication.
+- Multi-node deployment.
+- Outdoor sensor stations.
+- Remote greenhouse monitoring.
+
+---
+
+# 🛠 Version 7
+
+## Professional Hardware
+
+- Custom PCB.
+- Professional enclosure.
+- Industrial connectors.
+- Optimized power distribution.
+- Simplified wiring.
+
+---
+
+# 🧠 Version 8
+
+## Intelligent Agriculture Platform
+
+- Predictive analytics.
+- Machine learning.
+- Historical database.
+- Advanced dashboards.
+- Smart irrigation recommendations.
+- AI-powered environmental optimization.
 
 ---
 
 # 🔮 Future Development
 
-Planes a largo plazo:
+KAZTHOR FARM is designed as a long-term research and development platform. Future releases will continue expanding its capabilities in embedded systems, IoT, automation, and intelligent agriculture.
 
-* Diseño de PCB personalizada.
-* Reemplazo de protoboard.
-* Diseño de sistema propio de ventilación y humidificación.
-* Componentes impresos en 3D.
-* Control de dirección de aire mediante servomotor.
-* Adaptación a diferentes métodos hidropónicos.
-* Desarrollo de una versión comercial.
+## Short-Term Goals
+
+- Design and manufacture a custom PCB.
+- Replace the development breadboard with a production-ready design.
+- Develop a custom climate control module.
+- Improve power management and electrical protection.
+- Optimize enclosure design.
+- Integrate additional environmental sensors.
+
+---
+
+## Mid-Term Goals
+
+- Modular hardware architecture.
+- Advanced irrigation strategies.
+- Support for hydroponic systems.
+- 3D printed mechanical components.
+- Multi-node communication using LoRa.
+- Distributed greenhouse monitoring.
+- Historical data storage.
+
+---
+
+## Long-Term Vision
+
+- Computer vision using ESP32-S3 Camera.
+- Artificial Intelligence assisted monitoring.
+- Predictive irrigation algorithms.
+- Plant disease detection.
+- Growth analysis.
+- Cloud data analytics.
+- Smart greenhouse deployment.
+- Commercial-grade embedded platform.
+
+---
+
+# 🌍 Project Vision
+
+KAZTHOR FARM aims to become a complete **Smart Agriculture Platform**, combining embedded systems, IoT, automation, cloud connectivity, and Artificial Intelligence into a single modular ecosystem.
+
+The project is continuously evolving with a strong focus on:
+
+- Embedded Systems
+- Internet of Things (IoT)
+- Smart Automation
+- Environmental Monitoring
+- Cloud Connectivity
+- Computer Vision
+- Artificial Intelligence
+- Open Source Development
 
 ---
 
 # 👨‍💻 Author
 
-**Antonio Castor Silva**
+## Antonio Castor Silva
 
-KAZTHOR LABS
+**Founder — KAZTHOR LABS**
 
-GitHub:
+Building practical embedded systems, IoT solutions, automation platforms, and smart agriculture technologies using modern open-source tools.
+
+### Technologies
+
+- ESP32-S3
+- ESP-IDF
+- FreeRTOS
+- MQTT
+- HiveMQ Cloud
+- HTML
+- CSS
+- JavaScript
+- GitHub Pages
+
+---
+
+## 🌐 Links
+
+### GitHub
 
 https://github.com/antoniokazthor12345
 
-Dashboard:
+### Live Dashboard
 
 https://antoniokazthor12345.github.io/Kazthorfarm/
+
+### YouTube
+
+https://www.youtube.com/@AntonioKazthor
+
+---
+
+# 🤝 Contributing
+
+Contributions, suggestions, bug reports, and feature requests are always welcome.
+
+If you would like to contribute to KAZTHOR FARM, feel free to open an Issue or submit a Pull Request.
+
+Every contribution helps improve the project and supports the development of open-source smart agriculture technologies.
 
 ---
 
 # 📄 License
 
-MIT License
+This project is released under the **MIT License**.
+
+You are free to use, modify, distribute, and build upon this project while preserving the original license and copyright notice.
+
+See the **LICENSE** file for additional information.
 
 ---
 
-# ⭐ Support
+# ⭐ Support the Project
 
-If you find this project interesting, consider giving the repository a star and following future developments from KAZTHOR LABS.
+If you found this project useful or inspiring, please consider:
 
-Gracias por apoyar el desarrollo de proyectos relacionados con IoT, sistemas embebidos y automatización.
+- ⭐ Starring this repository.
+- 🍴 Forking the project.
+- 🐛 Reporting bugs or suggesting improvements.
+- 📢 Sharing the project with the embedded systems and IoT community.
+- ▶️ Following future developments from **KAZTHOR LABS**.
+
+Your support helps drive the continued development of open-source embedded technologies, smart agriculture solutions, and educational IoT projects.
+
+---
+
+<div align="center">
+
+## 🌱 KAZTHOR FARM V3.5
+
+**Smart Agriculture • Embedded Systems • IoT • Automation • ESP-IDF • FreeRTOS**
+
+Developed with ❤️ by **KAZTHOR LABS**
+
+*"Building the next generation of open-source smart agriculture platforms."*
+
+</div>

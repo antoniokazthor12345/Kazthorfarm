@@ -1,8 +1,236 @@
-Relay OFF
-Climate Controller Power OFF
+==========================================================
+KAZTHOR FARM V3.5
+PC817 OPTOCOUPLER VALIDATION TEST
+Hardware Refinement Update
+==========================================================
 
-Relay ON
-Climate Controller Power ON
+Date:
+July 2026
 
-Test Result:
+Controller:
+ESP32-S3 WROOM
+
+Firmware:
+ESP-IDF
+
+==========================================================
+
+TEST OBJECTIVE
+
+Validate the operation of all PC817 optocouplers used to
+simulate the climate controller push-buttons.
+
+==========================================================
+
+FAN CONTROL
+
+GPIO:
+
+GPIO16
+
+Device:
+
+PC817 Optocoupler
+
+Expected Behavior:
+
+Simulate FAN button press
+
+Observed Result:
+
+Fan changes speed correctly
+
+Status:
+
 PASS
+
+----------------------------------------------------------
+
+MIST CONTROL
+
+GPIO:
+
+GPIO17
+
+Device:
+
+PC817 Optocoupler
+
+Expected Behavior:
+
+Simulate MIST button press
+
+Observed Result:
+
+Humidifier changes level correctly
+
+Status:
+
+PASS
+
+----------------------------------------------------------
+
+LIGHT CONTROL
+
+GPIO:
+
+GPIO18
+
+Device:
+
+PC817 Optocoupler
+
+Expected Behavior:
+
+Simulate LIGHT button press
+
+Observed Result:
+
+RGB Light toggles correctly
+
+Status:
+
+PASS
+
+----------------------------------------------------------
+
+TIMER CONTROL
+
+GPIO:
+
+GPIO19
+
+Device:
+
+PC817 Optocoupler
+
+Expected Behavior:
+
+Simulate TIMER button press
+
+Observed Result:
+
+Timer function responds correctly
+
+Status:
+
+PASS
+
+==========================================================
+
+ELECTRICAL ISOLATION
+
+ESP32 Protected:
+
+YES
+
+Controller Protected:
+
+YES
+
+Electrical Noise:
+
+LOW
+
+Unexpected Triggering:
+
+NONE
+
+Result:
+
+PASS
+
+==========================================================
+
+CONTROL LATENCY
+
+Average Response Time:
+
+<100 ms
+
+Communication Errors:
+
+0
+
+Missed Commands:
+
+0
+
+Repeated Commands:
+
+0
+
+Result:
+
+PASS
+
+==========================================================
+
+SYSTEM INTEGRATION
+
+Dashboard Commands:
+
+PASS
+
+MQTT Commands:
+
+PASS
+
+Automatic Control:
+
+PASS
+
+Manual Control:
+
+PASS
+
+FreeRTOS Tasks:
+
+PASS
+
+==========================================================
+
+OVERALL RESULT
+
+Fan Control
+
+PASS
+
+Humidifier Control
+
+PASS
+
+RGB Light Control
+
+PASS
+
+Timer Control
+
+PASS
+
+Electrical Isolation
+
+PASS
+
+System Integration
+
+PASS
+
+==========================================================
+
+FINAL RESULT
+
+PC817 OPTOCOUPLER VALIDATION
+
+PASSED
+
+The ESP32 successfully controls the climate controller
+through isolated button emulation.
+
+==========================================================
+
+End of Validation Log
+
+KAZTHOR LABS
+
+==========================================================

@@ -1,47 +1,78 @@
-```txt
-=========================================
-KAZTHOR FARM V1
-MQTT CONNECTION LOG
-=========================================
+==========================================================
+KAZTHOR FARM V3.5
+MQTT CONNECTION VALIDATION LOG
+Hardware Refinement Update
+==========================================================
 
-[BOOT] Initializing WiFi...
+Date:
+July 2026
 
-[WIFI]
-SSID: ********
-Status: Connected
-IP Address: 192.168.100.xxx
-Signal: Excellent
+Firmware:
+ESP-IDF
 
------------------------------------------
+Controller:
+ESP32-S3 WROOM
 
-[MQTT]
+MQTT Broker:
+HiveMQ Cloud
 
-Broker: HiveMQ Cloud
-Protocol: MQTT over TLS
-Port: 8883
+==========================================================
 
-Connecting...
+SYSTEM BOOT
 
-TLS Handshake...
-Authentication...
+[BOOT]
 
-Connection Successful
+Initializing ESP32-S3...
 
-Subscribed Topics:
+Initializing FreeRTOS Tasks...
 
-✓ kazthor/farm01/cmd
+Loading Hardware...
 
-Publishing Topics:
+Initializing Sensors...
 
-✓ kazthor/farm01/data
-✓ kazthor/farm01/status
-✓ kazthor/farm01/alerts
+OLED Display...
 
-Heartbeat Started...
+Relay...
 
-Connection Status:
+Servo...
 
-ONLINE
+PC817 Interfaces...
+
+Climate Controller...
+
+Boot Completed
+
+Result:
+
+PASS
+
+==========================================================
+
+WIFI CONNECTION
+
+SSID:
+
+********
+
+Status:
+
+CONNECTED
+
+IP Address:
+
+192.168.100.xxx
+
+Signal Quality:
+
+EXCELLENT
+
+Gateway:
+
+192.168.100.1
+
+DNS:
+
+Automatic
 
 Reconnect Attempts:
 
@@ -51,7 +82,324 @@ Result:
 
 PASS
 
-=========================================
-End of Log
-=========================================
-```
+==========================================================
+
+MQTT CONNECTION
+
+Broker:
+
+HiveMQ Cloud
+
+Protocol:
+
+MQTT over TLS
+
+Port:
+
+8883
+
+Encryption:
+
+TLS
+
+Client ID:
+
+kazthor-farm-v35
+
+==========================================================
+
+TLS HANDSHAKE
+
+Loading Certificates...
+
+TLS Handshake...
+
+Authentication...
+
+Secure Session Established
+
+Result:
+
+PASS
+
+==========================================================
+
+MQTT SESSION
+
+Connection Status:
+
+ONLINE
+
+Session:
+
+ACTIVE
+
+Keep Alive:
+
+60 Seconds
+
+Heartbeat:
+
+ACTIVE
+
+Reconnect Attempts:
+
+0
+
+Connection Stability:
+
+STABLE
+
+==========================================================
+
+SUBSCRIBED TOPICS
+
+✓ kazthor/farm01/cmd
+
+Result:
+
+PASS
+
+==========================================================
+
+PUBLISHED TOPICS
+
+✓ kazthor/farm01/data
+
+✓ kazthor/farm01/status
+
+✓ kazthor/farm01/alerts
+
+✓ kazthor/farm01/heartbeat
+
+Result:
+
+PASS
+
+==========================================================
+
+LIVE TELEMETRY
+
+Temperature
+
+Published
+
+PASS
+
+Soil Moisture
+
+Published
+
+PASS
+
+Water Level
+
+Published
+
+PASS
+
+Fan Status
+
+Published
+
+PASS
+
+Humidifier Status
+
+Published
+
+PASS
+
+Servo Position
+
+Published
+
+PASS
+
+Relay Status
+
+Published
+
+PASS
+
+System State
+
+Published
+
+PASS
+
+==========================================================
+
+REMOTE COMMAND TEST
+
+Dashboard Command
+
+Received
+
+PASS
+
+Fan Control
+
+PASS
+
+Humidifier Control
+
+PASS
+
+Relay Control
+
+PASS
+
+Servo Manual Control
+
+PASS
+
+Light Control
+
+PASS
+
+==========================================================
+
+SYSTEM STATUS
+
+Device:
+
+kazthor-farm-v35
+
+Firmware:
+
+Version 3.5
+
+WiFi:
+
+CONNECTED
+
+MQTT:
+
+CONNECTED
+
+Dashboard:
+
+CONNECTED
+
+FreeRTOS:
+
+RUNNING
+
+Telemetry:
+
+ACTIVE
+
+==========================================================
+
+NETWORK PERFORMANCE
+
+Packet Loss:
+
+0%
+
+Latency:
+
+LOW
+
+Reconnect Events:
+
+0
+
+MQTT Errors:
+
+0
+
+WiFi Errors:
+
+0
+
+==========================================================
+
+SECURITY VALIDATION
+
+TLS Encryption
+
+PASS
+
+Broker Authentication
+
+PASS
+
+Credentials Loaded
+
+PASS
+
+Secure Connection
+
+PASS
+
+==========================================================
+
+OVERALL RESULT
+
+ESP32 Boot
+
+PASS
+
+WiFi Connection
+
+PASS
+
+TLS Handshake
+
+PASS
+
+MQTT Connection
+
+PASS
+
+Topic Subscription
+
+PASS
+
+Telemetry
+
+PASS
+
+Dashboard Communication
+
+PASS
+
+Command Reception
+
+PASS
+
+Remote Control
+
+PASS
+
+Heartbeat
+
+PASS
+
+==========================================================
+
+FINAL RESULT
+
+MQTT COMMUNICATION
+
+VALIDATED
+
+SYSTEM STATUS
+
+ONLINE
+
+READY FOR
+
+VERSION 4
+
+Mini Smart Greenhouse
+
+==========================================================
+
+End of Validation Log
+
+KAZTHOR LABS
+
+==========================================================

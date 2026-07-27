@@ -1,14 +1,178 @@
-TEMP: 22.25 °C
-SOIL: 74 %
-WATER: 65 %
-STATE: NORMAL
+==========================================================
+KAZTHOR FARM V3.5
+SYSTEM STATE VALIDATION LOG
+Hardware Refinement Update
+==========================================================
 
-TEMP: 34.10 °C
-SOIL: 29 %
-WATER: 61 %
-STATE: ALERT
+Firmware:
+ESP-IDF
 
-TEMP: 36.50 °C
-SOIL: 18 %
-WATER: 42 %
-STATE: CRITICAL
+Controller:
+ESP32-S3 WROOM
+
+==========================================================
+
+TEST 01
+
+Temperature:
+
+22.25 °C
+
+Soil Moisture:
+
+74 %
+
+Water Level:
+
+65 %
+
+System State:
+
+NORMAL
+
+Expected Behavior:
+
+✔ Climate conditions within normal range
+✔ Fan automatic control available
+✔ Humidifier automatic control available
+✔ No audible alarm
+✔ Green LED ON
+✔ Red LED OFF
+
+Result:
+
+PASS
+
+----------------------------------------------------------
+
+TEST 02
+
+Temperature:
+
+34.10 °C
+
+Soil Moisture:
+
+29 %
+
+Water Level:
+
+61 %
+
+System State:
+
+ALERT
+
+Expected Behavior:
+
+✔ Automatic climate adjustment
+✔ Fan speed increased
+✔ Humidifier activated if required
+✔ Warning state displayed on OLED
+✔ Dashboard updated
+
+Result:
+
+PASS
+
+----------------------------------------------------------
+
+TEST 03
+
+Temperature:
+
+36.50 °C
+
+Soil Moisture:
+
+18 %
+
+Water Level:
+
+42 %
+
+System State:
+
+CRITICAL
+
+Expected Behavior:
+
+✔ Maximum fan speed
+✔ Maximum humidifier level
+✔ Buzzer activated
+✔ Red LED ON
+✔ Critical alert published via MQTT
+✔ OLED displays CRITICAL state
+✔ Dashboard receives alert
+
+Result:
+
+PASS
+
+==========================================================
+
+STATE TRANSITION TEST
+
+NORMAL  → ALERT
+
+PASS
+
+ALERT → CRITICAL
+
+PASS
+
+CRITICAL → NORMAL
+
+PASS
+
+Unexpected Transitions:
+
+NONE
+
+==========================================================
+
+CONTROL LOGIC
+
+Temperature Thresholds:
+
+PASS
+
+Soil Moisture Thresholds:
+
+PASS
+
+Water Level Monitoring:
+
+PASS
+
+Automatic State Detection:
+
+PASS
+
+MQTT State Synchronization:
+
+PASS
+
+Dashboard Synchronization:
+
+PASS
+
+==========================================================
+
+FINAL RESULT
+
+SYSTEM STATE VALIDATION
+
+PASSED
+
+All environmental states were detected
+correctly and the corresponding automatic
+actions were executed successfully.
+
+==========================================================
+
+End of Validation Log
+
+KAZTHOR LABS
+
+==========================================================

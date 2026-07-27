@@ -15,6 +15,7 @@
 #include "freertos/semphr.h"
 #include "driver/i2c_master.h"
 #include "driver/gpio.h"
+#include "driver/ledc.h"
 #include "esp_log.h"
 #include "esp_rom_sys.h"
 #include "esp_adc/adc_oneshot.h"
@@ -42,14 +43,35 @@
 #define DS18B20_GPIO GPIO_NUM_13
 
 // ============================================================
+// SERVO SG90 (oscilador del ventilador)
+// ============================================================
+#define SERVO_GPIO GPIO_NUM_40
+#define SERVO_LEDC_TIMER LEDC_TIMER_1
+#define SERVO_LEDC_MODE LEDC_LOW_SPEED_MODE
+#define SERVO_LEDC_CHAN LEDC_CHANNEL_1
+#define SERVO_DUTY_RES LEDC_TIMER_14_BIT
+#define SERVO_FREQ_HZ 50
+
+#define SERVO_ANGLE_ARRIBA 170
+#define SERVO_ANGLE_ABAJO 20
+
+#define SERVO_STEP_DEG 1
+#define SERVO_STEP_DELAY_MS 20
+
+#define SERVO_AUTO_STEP_DEG 10
+#define SERVO_AUTO_INTERVAL_MS 5000
+
+#define SERVO_MANUAL_STEP_DEG 5
+
+// ============================================================
 // CREDENCIALES
 // ============================================================
-#define WIFI_SSID "**********************************"
-#define WIFI_PASS "**********************************"
+#define WIFI_SSID "************"
+#define WIFI_PASS "************"
 
-#define MQTT_BROKER_URI "**********************************"
-#define MQTT_USERNAME "**********************************"
-#define MQTT_PASSWORD "**********************************"
+#define MQTT_BROKER_URI "mqtts://************.s1.eu.hivemq.cloud:8883"
+#define MQTT_USERNAME "************"
+#define MQTT_PASSWORD "************"
 
 #define MQTT_TOPIC_PUB "kazthor/farm01/data"
 #define MQTT_TOPIC_CMD "kazthor/farm01/cmd"
@@ -99,6 +121,7 @@ static bool cmd_light_action = false;
 static bool cmd_alarm_pending = false;
 static bool cmd_alarm_action = false;
 static int cmd_timer_target = -1;
+static int cmd_servo_target = -1;
 
 static uint32_t timer_countdown_s = 0;
 static const uint32_t TIMER_HORAS_S[] = {0, 3600, 7200, 10800};
@@ -510,6 +533,133 @@ static void sync_climate_off_after_timer(void)
     ESP_LOGW(TAG, "[TIMER] Expirado: dashboard y OLED sincronizados en OFF");
 }
 
+static void servo_set_angle(int angle);
+
+static void servo_disable()
+{
+    ledc_stop(
+        SERVO_LEDC_MODE,
+        SERVO_LEDC_CHAN,
+        0);
+
+    ESP_LOGI(TAG, "[SERVO] PWM apagado");
+}
+
+// ============================================================
+// SERVO SG90 (LEDC PWM)
+// ============================================================
+static void servo_init(void)
+{
+    ledc_timer_config_t servo_timer = {
+        .speed_mode = SERVO_LEDC_MODE,
+        .duty_resolution = SERVO_DUTY_RES,
+        .timer_num = SERVO_LEDC_TIMER,
+        .freq_hz = SERVO_FREQ_HZ,
+        .clk_cfg = LEDC_AUTO_CLK};
+    ledc_timer_config(&servo_timer);
+
+    ledc_channel_config_t servo_channel = {
+        .speed_mode = SERVO_LEDC_MODE,
+        .channel = SERVO_LEDC_CHAN,
+        .timer_sel = SERVO_LEDC_TIMER,
+        .intr_type = LEDC_INTR_DISABLE,
+        .gpio_num = SERVO_GPIO,
+        .duty = 0,
+        .hpoint = 0};
+    ledc_channel_config(&servo_channel);
+
+}
+
+static int servo_current_angle = -1;
+
+static void servo_set_angle(int angle)
+{
+    if (angle < 0)
+        angle = 0;
+    if (angle > 180)
+        angle = 180;
+
+    int pulse_us = 1000 + (angle * 1000) / 180;
+    int max_duty = (1 << SERVO_DUTY_RES) - 1;
+    int duty = (pulse_us * max_duty) / 20000;
+
+    ledc_set_duty(SERVO_LEDC_MODE, SERVO_LEDC_CHAN, duty);
+    ledc_update_duty(SERVO_LEDC_MODE, SERVO_LEDC_CHAN);
+
+    servo_current_angle = angle;
+}
+
+static void servo_move_smooth(int target_angle)
+{
+    if (target_angle < 0)
+        target_angle = 0;
+    if (target_angle > 180)
+        target_angle = 180;
+
+    if (servo_current_angle < 0)
+    {
+        servo_set_angle(target_angle);
+        return;
+    }
+
+    if (servo_current_angle < target_angle)
+    {
+        for (int a = servo_current_angle; a <= target_angle; a += SERVO_STEP_DEG)
+        {
+            servo_set_angle(a);
+            vTaskDelay(pdMS_TO_TICKS(SERVO_STEP_DELAY_MS));
+        }
+    }
+    else if (servo_current_angle > target_angle)
+    {
+        for (int a = servo_current_angle; a >= target_angle; a -= SERVO_STEP_DEG)
+        {
+            servo_set_angle(a);
+            vTaskDelay(pdMS_TO_TICKS(SERVO_STEP_DELAY_MS));
+        }
+    }
+
+    servo_set_angle(target_angle);
+}
+
+static void servo_task(void *pv)
+{
+    bool centrado = false;
+
+    while (1)
+    {
+        if (fan_level > 0)
+        {   
+            servo_init();
+            centrado = false;
+
+            servo_move_smooth(SERVO_ANGLE_ABAJO);
+            vTaskDelay(pdMS_TO_TICKS(3000));
+
+            servo_move_smooth(SERVO_ANGLE_ARRIBA);
+            vTaskDelay(pdMS_TO_TICKS(3000));
+        }
+
+        else
+        {
+            if (!centrado)
+            {
+                servo_move_smooth(90);
+
+                vTaskDelay(pdMS_TO_TICKS(500));
+
+                servo_disable();
+
+                centrado = true;
+
+                ESP_LOGI(TAG, "[SERVO] Centrado y apagado");
+            }
+
+            vTaskDelay(pdMS_TO_TICKS(500));
+        }
+    }
+}
+
 // ============================================================
 // MQTT EVENT HANDLER
 // ============================================================
@@ -634,6 +784,17 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base,
                 cmd_timer_target = val;
                 ESP_LOGW(TAG, "[MQTT] CMD TIMER -> %d", val);
             }
+        }
+
+        if (strstr(msg, "\"servo\":\"up\""))
+        {
+            cmd_servo_target = 1;
+            ESP_LOGW(TAG, "[MQTT] CMD SERVO -> UP");
+        }
+        else if (strstr(msg, "\"servo\":\"down\""))
+        {
+            cmd_servo_target = 0;
+            ESP_LOGW(TAG, "[MQTT] CMD SERVO -> DOWN");
         }
 
         break;
@@ -1279,6 +1440,15 @@ void app_main(void)
     }
 
     ESP_LOGI(TAG, "KAZTHOR FARM RTOS iniciado");
+    servo_init();
+
+    servo_set_angle(30);
+    vTaskDelay(pdMS_TO_TICKS(2000));
+
+    servo_set_angle(150);
+    vTaskDelay(pdMS_TO_TICKS(2000));
+
+    servo_set_angle(90);
 
     wifi_init();
 
@@ -1286,4 +1456,5 @@ void app_main(void)
     xTaskCreate(control_task, "control_task", 8192, NULL, 4, NULL);
     xTaskCreate(display_task, "display_task", 4096, NULL, 3, NULL);
     xTaskCreate(mqtt_publish_task, "mqtt_publish_task", 6144, NULL, 2, NULL);
+    xTaskCreate(servo_task, "servo_task", 4096, NULL, 6, NULL);
 }

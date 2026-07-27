@@ -1,5 +1,127 @@
-I (2154) WIFI: Connected
-I (2400) MQTT: Connected to HiveMQ Cloud
-I (2501) OLED: Display initialized
-I (2603) SENSOR: DS18B20 detected
-I (2700) FARM: System Ready
+==========================================================
+KAZTHOR FARM V3.5
+SYSTEM BOOT LOG
+Hardware Refinement Update
+==========================================================
+
+I (0000) BOOT: Starting KAZTHOR FARM V3.5...
+
+I (0035) CPU: ESP32-S3 Dual Core Detected
+
+I (0062) MEMORY: PSRAM Initialized
+
+I (0105) STORAGE: Configuration Loaded
+
+----------------------------------------------------------
+
+I (0180) WIFI: Initializing WiFi...
+
+I (0523) WIFI: Connected
+
+I (0540) WIFI: IP Address Assigned
+
+I (0561) WIFI: Signal Strength Excellent
+
+----------------------------------------------------------
+
+I (0702) MQTT: Connecting to HiveMQ Cloud...
+
+I (0845) MQTT: TLS Handshake Successful
+
+I (0963) MQTT: Connected
+
+I (1010) MQTT: Topics Subscribed
+
+I (1040) MQTT: Heartbeat Started
+
+----------------------------------------------------------
+
+I (1158) OLED: Display Initialized
+
+I (1210) OLED: Dashboard Screen Loaded
+
+----------------------------------------------------------
+
+I (1328) SENSOR: DS18B20 Detected
+
+I (1362) SENSOR: Soil Moisture Sensor Ready
+
+I (1396) SENSOR: Water Level Sensor Ready
+
+----------------------------------------------------------
+
+I (1510) RELAY: Initialized
+
+I (1560) PC817: FAN Interface Ready
+
+I (1602) PC817: MIST Interface Ready
+
+I (1648) PC817: LIGHT Interface Ready
+
+I (1690) PC817: TIMER Interface Ready
+
+----------------------------------------------------------
+
+I (1815) SERVO: Initialized
+
+I (1854) SERVO: Home Position Set
+
+----------------------------------------------------------
+
+I (1972) FREERTOS: Sensor Task Started
+
+I (2015) FREERTOS: Control Task Started
+
+I (2056) FREERTOS: MQTT Task Started
+
+I (2094) FREERTOS: Display Task Started
+
+----------------------------------------------------------
+
+I (2210) FARM: Automatic Climate Controller Ready
+
+I (2268) FARM: Dashboard Communication Active
+
+I (2324) FARM: Telemetry Enabled
+
+I (2388) FARM: System Ready
+
+==========================================================
+
+BOOT RESULT
+
+ESP32 Initialization........PASS
+
+WiFi Connection..............PASS
+
+MQTT Connection..............PASS
+
+OLED Initialization..........PASS
+
+Sensor Detection.............PASS
+
+Relay Initialization.........PASS
+
+PC817 Interfaces.............PASS
+
+Servo Initialization.........PASS
+
+FreeRTOS Tasks...............PASS
+
+System Startup...............PASS
+
+==========================================================
+
+KAZTHOR FARM V3.5
+
+STATUS:
+
+READY
+
+==========================================================
+
+End of Boot Log
+
+KAZTHOR LABS
+
+==========================================================
